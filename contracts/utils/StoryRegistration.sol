@@ -9,7 +9,7 @@ import {ILicensingModule} from
     "@story-protocol/protocol-core/contracts/interfaces/modules/licensing/ILicensingModule.sol";
 import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
-abstract contract StoryUtil is Initializable {
+abstract contract StoryRegistration is Initializable {
     /// @notice Story Proof-of-Creativity IP Asset Registry address.
     IIPAssetRegistry public IP_ASSET_REGISTRY;
 
@@ -25,14 +25,14 @@ abstract contract StoryUtil is Initializable {
     /// @notice The default license terms ID.
     uint256 public DEFAULT_LICENSE_TERMS_ID;
 
-    error StoryUtil__ZeroAddressParam();
-    error StoryUtil__CallerNotTokenOwner();
+    error StoryRegistration__ZeroAddressParam();
+    error StoryRegistration__CallerNotTokenOwner();
 
     constructor() {
         _disableInitializers();
     }
 
-    function __StoryUtil_init(
+    function __StoryRegistration_init(
         address ipAssetRegistry,
         address licensingModule,
         address coreMetadataModule,
@@ -40,7 +40,7 @@ abstract contract StoryUtil is Initializable {
         uint256 defaultLicenseTermID
     ) internal {
         if (ipAssetRegistry == address(0) || licensingModule == address(0) || coreMetadataModule == address(0)) {
-            revert StoryUtil__ZeroAddressParam();
+            revert StoryRegistration__ZeroAddressParam();
         }
         IP_ASSET_REGISTRY = IIPAssetRegistry(ipAssetRegistry);
         LICENSING_MODULE = ILicensingModule(licensingModule);
