@@ -1,0 +1,32 @@
+{
+  "name": "nft-launchpad",
+  "version": "0.0.1",
+  "description": "the nft contract for launchpad",
+  "main": "index.js",
+  "author": "hoanm <mr.nmh175@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@nomicfoundation/hardhat-chai-matchers": "^2.0.8",
+    "@nomicfoundation/hardhat-ethers": "^3.0.8",
+    "@nomicfoundation/hardhat-ignition": "^0.15.9",
+    "@nomicfoundation/hardhat-ignition-ethers": "^0.15.9",
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.12",
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@nomicfoundation/hardhat-verify": "^2.0.12",
+    "@openzeppelin/contracts": "^5.1.0",
+    "@openzeppelin/contracts-upgradeable": "^5.1.0",
+    "@typechain/ethers-v6": "^0.5.1",
+    "@typechain/hardhat": "^9.1.0",
+    "chai": "4",
+    "ethers": "^6.13.5",
+    "hardhat": "^2.22.18",
+    "hardhat-deploy": "^0.14.0",
+    "hardhat-gas-reporter": "^2.2.2",
+    "solidity-coverage": "^0.8.14",
+    "typechain": "^8.3.2"
+  },
+  "devDependencies": {
+    "@story-protocol/protocol-core": "github:storyprotocol/protocol-core-v1#58f023c",
+    "@story-protocol/protocol-periphery": "github:storyprotocol/protocol-periphery-v1#d0081ee"
+  }
+}
