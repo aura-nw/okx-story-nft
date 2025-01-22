@@ -4,12 +4,11 @@ pragma solidity ^0.8.26;
 
 import {AccessControlUpgradeable} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import {EIP712Upgradeable} from "@openzeppelin/contracts-upgradeable/utils/cryptography/EIP712Upgradeable.sol";
-import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import {ECDSA} from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import {IOkxMultiRound} from "../interfaces/IOkxMultiRound.sol";
 
 /// @custom:security-contact mr.nmh175@gmail.com
-contract OkxMultiRound is Initializable, IOkxMultiRound, EIP712Upgradeable, AccessControlUpgradeable {
+abstract contract OkxMultiRound is IOkxMultiRound, EIP712Upgradeable, AccessControlUpgradeable {
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
@@ -23,20 +22,6 @@ contract OkxMultiRound is Initializable, IOkxMultiRound, EIP712Upgradeable, Acce
     mapping(string => uint256) public stageToTotalSupply; //Minted amount for each stage.
     uint256 public maxSupply;
     uint256 public totalMintedAmount;
-
-    /// @custom:oz-upgrades-unsafe-allow constructor
-    constructor() {
-        _disableInitializers();
-    }
-
-    function initialize(address defaultAdmin, address pauser, address minter) public initializer {
-        __AccessControl_init();
-        __EIP712_init("PunkNFT", "1.0");
-
-        _grantRole(DEFAULT_ADMIN_ROLE, defaultAdmin);
-        _grantRole(PAUSER_ROLE, pauser);
-        _grantRole(MINTER_ROLE, minter);
-    }
 
     function __OkxMultiRound_init(address _signer, uint256 _maxSupply) public initializer {
         signer = _signer;
