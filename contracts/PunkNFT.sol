@@ -4,26 +4,12 @@ pragma solidity ^0.8.26;
 
 import {AccessControlUpgradeable} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import {ERC721Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
-import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import {ECDSA} from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import {OkxMultiRound} from "./utils/OkxMultiRound.sol";
 import {StoryRegistration} from "./utils/StoryRegistration.sol";
 import {IPunkNFT} from "./interfaces/IPunkNFT.sol";
 
 /// @custom:security-contact mr.nmh175@gmail.com
-contract PunkNFT is
-    Initializable,
-    IPunkNFT,
-    ERC721Upgradeable,
-    AccessControlUpgradeable,
-    StoryRegistration,
-    OkxMultiRound
-{
-    string public ipMetadataURI;
-    bytes32 public ipMetadataHash;
-    bytes32 public nftMetadataHash;
-    address public rootIpId;
-
+contract PunkNFT is IPunkNFT, ERC721Upgradeable, AccessControlUpgradeable, StoryRegistration, OkxMultiRound {
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
         _disableInitializers();
@@ -45,16 +31,12 @@ contract PunkNFT is
         __OkxMultiRound_init(customInitParams.signer, 10000);
 
         __StoryRegistration_init(
-            ipAssetRegistry, licensingModule, coreMetadataModule, pilTemplate, defaultLicenseTermsId
+            ipAssetRegistry, licensingModule, coreMetadataModule, pilTemplate, defaultLicenseTermsId, customInitParams
         );
 
         _grantRole(DEFAULT_ADMIN_ROLE, defaultAdmin);
         _grantRole(PAUSER_ROLE, pauser);
         _grantRole(MINTER_ROLE, minter);
-
-        ipMetadataURI = customInitParams.ipMetadataURI;
-        ipMetadataHash = customInitParams.ipMetadataHash;
-        nftMetadataHash = customInitParams.nftMetadataHash;
     }
 
     /// @notice Mints a NFT for the given recipient, registers it as an IP,
@@ -95,7 +77,7 @@ contract PunkNFT is
         tokenId = ++totalMintedAmount;
         _safeMint(address(this), tokenId);
 
-        ipId = _registerIp(tokenId, ipMetadataURI, ipMetadataHash, nftMetadataHash);
+        ipId = _registerIp(tokenId);
 
         address[] memory parentIpIds = new address[](1);
         uint256[] memory licenseTermsIds = new uint256[](1);

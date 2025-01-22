@@ -10,6 +10,23 @@ import {ILicensingModule} from
     "@story-protocol/protocol-core-v1.2.3/contracts/interfaces/modules/licensing/ILicensingModule.sol";
 
 abstract contract StoryRegistration {
+    ////////////////////////////////////////////////////////////////////////////
+    //                              Structs                                   //
+    ////////////////////////////////////////////////////////////////////////////
+    /// @notice Struct for custom data for initializing the PunkNFT contract.
+    /// @param tokenURI The token URI for all NFTs (follows OpenSea metadata standard).
+    /// @param signer The signer of the whitelist signatures.
+    /// @param ipMetadataURI The URI of the metadata for all IP from this collection.
+    /// @param ipMetadataHash The hash of the metadata for all IP from this collection.
+    /// @param nftMetadataHash The hash of the metadata for all IP NFTs from this collection.
+    struct CustomInitParams {
+        string tokenURI;
+        address signer;
+        string ipMetadataURI;
+        bytes32 ipMetadataHash;
+        bytes32 nftMetadataHash;
+    }
+
     /// @notice Story Proof-of-Creativity IP Asset Registry address.
     IIPAssetRegistry public IP_ASSET_REGISTRY;
 
@@ -25,18 +42,24 @@ abstract contract StoryRegistration {
     /// @notice The default license terms ID.
     uint256 public DEFAULT_LICENSE_TERMS_ID;
 
-    error StoryRegistration__ZeroAddressParam();
-    error StoryRegistration__CallerNotTokenOwner();
+    error ZeroAddressParam();
+    error CallerNotTokenOwner();
+
+    string public ipMetadataURI;
+    bytes32 public ipMetadataHash;
+    bytes32 public nftMetadataHash;
+    address public rootIpId;
 
     function __StoryRegistration_init(
         address ipAssetRegistry,
         address licensingModule,
         address coreMetadataModule,
         address pilTemplate,
-        uint256 defaultLicenseTermID
+        uint256 defaultLicenseTermId,
+        CustomInitParams calldata customInitParams
     ) internal {
         if (ipAssetRegistry == address(0) || licensingModule == address(0) || coreMetadataModule == address(0)) {
-            revert StoryRegistration__ZeroAddressParam();
+            revert ZeroAddressParam();
         }
         IP_ASSET_REGISTRY = IIPAssetRegistry(ipAssetRegistry);
         LICENSING_MODULE = ILicensingModule(licensingModule);
@@ -44,20 +67,17 @@ abstract contract StoryRegistration {
 
         PIL_TEMPLATE = pilTemplate;
 
-        DEFAULT_LICENSE_TERMS_ID = defaultLicenseTermID;
+        DEFAULT_LICENSE_TERMS_ID = defaultLicenseTermId;
+
+        ipMetadataURI = customInitParams.ipMetadataURI;
+        ipMetadataHash = customInitParams.ipMetadataHash;
+        nftMetadataHash = customInitParams.nftMetadataHash;
     }
 
     /// @notice Register and NFT as an IP asset.
     /// @param tokenId The ID of the token to register
-    /// @param ipMetadataURI The URI of the metadata for the IP.
-    /// @param ipMetadataHash The hash of the metadata for the IP.
-    /// @param nftMetadataHash The hash of the metadata for the IP NFT.
     /// @return ipId The ID of the newly created IP.
-    function _registerIp(uint256 tokenId, string memory ipMetadataURI, bytes32 ipMetadataHash, bytes32 nftMetadataHash)
-        internal
-        virtual
-        returns (address ipId)
-    {
+    function _registerIp(uint256 tokenId) internal virtual returns (address ipId) {
         ipId = IP_ASSET_REGISTRY.register(block.chainid, address(this), tokenId);
 
         // set the IP metadata if they are not empty
