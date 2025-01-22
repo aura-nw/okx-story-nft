@@ -26,7 +26,7 @@
     "typechain": "^8.3.2"
   },
   "devDependencies": {
-    "@story-protocol/protocol-core": "github:storyprotocol/protocol-core-v1#58f023c",
-    "@story-protocol/protocol-periphery": "github:storyprotocol/protocol-periphery-v1#d0081ee"
+    "@story-protocol/protocol-core-v1.2.3": "github:storyprotocol/protocol-core-v1#58f023c",
+    "@story-protocol/protocol-periphery-v1.2.4": "github:storyprotocol/protocol-periphery-v1#d0081ee"
   }
 }

@@ -859,7 +859,7 @@
   version "0.0.0"
   resolved "https://codeload.github.com/storyprotocol/create3-deployer/tar.gz/604d69eb093e0ec2e1e751892748b2508359d5ba"
 
-"@story-protocol/protocol-core@github:storyprotocol/protocol-core-v1#58f023c", "@story-protocol/protocol-core@github:storyprotocol/protocol-core-v1#v1.2.3":
+"@story-protocol/protocol-core-v1.2.3@github:storyprotocol/protocol-core-v1#58f023c":
   version "1.1.0"
   resolved "https://codeload.github.com/storyprotocol/protocol-core-v1/tar.gz/58f023cb4a5ee81617bc8a02a3d2087e125e5a36"
   dependencies:
@@ -869,7 +869,17 @@
     erc6551 "^0.3.1"
     solady "^0.0.192"
 
-"@story-protocol/protocol-periphery@github:storyprotocol/protocol-periphery-v1#d0081ee":
+"@story-protocol/protocol-core@github:storyprotocol/protocol-core-v1#v1.2.3":
+  version "1.1.0"
+  resolved "https://codeload.github.com/storyprotocol/protocol-core-v1/tar.gz/58f023cb4a5ee81617bc8a02a3d2087e125e5a36"
+  dependencies:
+    "@openzeppelin/contracts" "5.0.2"
+    "@openzeppelin/contracts-upgradeable" "5.0.2"
+    "@openzeppelin/contracts-upgradeable-v4" "npm:@openzeppelin/contracts-upgradeable@4.9.6"
+    erc6551 "^0.3.1"
+    solady "^0.0.192"
+
+"@story-protocol/protocol-periphery-v1.2.4@github:storyprotocol/protocol-periphery-v1#d0081ee":
   version "1.2.4"
   resolved "https://codeload.github.com/storyprotocol/protocol-periphery-v1/tar.gz/d0081ee9462fe39bffaa3768cdf92fc07df6497b"
   dependencies:

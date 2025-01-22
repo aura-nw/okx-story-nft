@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.26;
+pragma solidity ^0.8.26;
 
 /// @title Story NFT Interface
 /// @notice A Story NFT is a soulbound NFT that has an unified token URI for all tokens.

@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.26;
+pragma solidity ^0.8.26;
 
 import {ICoreMetadataModule} from
-    "@story-protocol/protocol-core/contracts/interfaces/modules/metadata/ICoreMetadataModule.sol";
-import {IIPAssetRegistry} from "@story-protocol/protocol-core/contracts/interfaces/registries/IIPAssetRegistry.sol";
+    "@story-protocol/protocol-core-v1.2.3/contracts/interfaces/modules/metadata/ICoreMetadataModule.sol";
+import {IIPAssetRegistry} from
+    "@story-protocol/protocol-core-v1.2.3/contracts/interfaces/registries/IIPAssetRegistry.sol";
 // /*solhint-disable-next-line max-line-length*/
 import {ILicensingModule} from
-    "@story-protocol/protocol-core/contracts/interfaces/modules/licensing/ILicensingModule.sol";
-import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+    "@story-protocol/protocol-core-v1.2.3/contracts/interfaces/modules/licensing/ILicensingModule.sol";
 
-abstract contract StoryRegistration is Initializable {
+abstract contract StoryRegistration {
     /// @notice Story Proof-of-Creativity IP Asset Registry address.
     IIPAssetRegistry public IP_ASSET_REGISTRY;
 
@@ -28,10 +28,6 @@ abstract contract StoryRegistration is Initializable {
     error StoryRegistration__ZeroAddressParam();
     error StoryRegistration__CallerNotTokenOwner();
 
-    constructor() {
-        _disableInitializers();
-    }
-
     function __StoryRegistration_init(
         address ipAssetRegistry,
         address licensingModule,
@@ -47,6 +43,7 @@ abstract contract StoryRegistration is Initializable {
         CORE_METADATA_MODULE = ICoreMetadataModule(coreMetadataModule);
 
         PIL_TEMPLATE = pilTemplate;
+
         DEFAULT_LICENSE_TERMS_ID = defaultLicenseTermID;
     }
 
