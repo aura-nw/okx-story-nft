@@ -57,15 +57,15 @@ contract PunkNFT is
         nftMetadataHash = customInitParams.nftMetadataHash;
     }
 
-    /// @notice Mints a badge for the given recipient, registers it as an IP,
+    /// @notice Mints a NFT for the given recipient, registers it as an IP,
     ///         and makes it a derivative of the organization IP.
     /// @param stage         Identification of the stage
     /// @param signature     The signature from the whitelist signer. This signautre is genreated by having the whitelist
     /// the 3rd param, proof, is the proof for the leaf of the allowlist in a stage if mint type is Allowlist.
     /// @param mintparams    The mint parameter
     /// signer sign the caller's address (msg.sender) for this `mint` function.
-    /// @return tokenId The token ID of the minted badge NFT.
-    /// @return ipId The ID of the badge NFT IP.
+    /// @return tokenId The token ID of the minted NFT.
+    /// @return ipId The ID of the NFT IP.
     function mint(
         string calldata stage,
         bytes calldata signature,
