@@ -573,6 +573,13 @@
     debug "^4.1.1"
     lodash.isequal "^4.5.0"
 
+"@nomicfoundation/hardhat-foundry@^1.1.3":
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/@nomicfoundation/hardhat-foundry/-/hardhat-foundry-1.1.3.tgz#1b4f63c128e80f04aae22385dc9078ab9072794d"
+  integrity sha512-30Ezc3hlZ4pC5Z/9W9euW5uoPKKQQKaecLETHJH8BPpd30zYOooy6HfjmcTY1/taOQjlwirOdNO7tHlje8Qcgw==
+  dependencies:
+    picocolors "^1.1.0"
+
 "@nomicfoundation/hardhat-ignition-ethers@^0.15.9":
   version "0.15.9"
   resolved "https://registry.yarnpkg.com/@nomicfoundation/hardhat-ignition-ethers/-/hardhat-ignition-ethers-0.15.9.tgz#706801c2e8c70b39c77377439bdb240c20eee76c"
@@ -691,30 +698,30 @@
   resolved "https://registry.yarnpkg.com/@openzeppelin/contracts-upgradeable/-/contracts-upgradeable-4.9.6.tgz#38b21708a719da647de4bb0e4802ee235a0d24df"
   integrity sha512-m4iHazOsOCv1DgM7eD7GupTJ+NFVujRZt1wzddDPSVGpWdKq1SKkla5htKG7+IS4d2XOCtzkUNwRZ7Vq5aEUMA==
 
-"@openzeppelin/contracts-upgradeable@5.0.1":
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/@openzeppelin/contracts-upgradeable/-/contracts-upgradeable-5.0.1.tgz#ebc163cbed2de6b8b69bff628261d18deb912a81"
-  integrity sha512-MvaLoPnVcoZr/qqZP+4cl9piuR4gg0iIGgxVSZ/AL1iId3M6IdEHzz9Naw5Lirl4KKBI6ciTVnX07yL4dOMIJg==
-
 "@openzeppelin/contracts-upgradeable@5.0.2":
   version "5.0.2"
   resolved "https://registry.yarnpkg.com/@openzeppelin/contracts-upgradeable/-/contracts-upgradeable-5.0.2.tgz#3e5321a2ecdd0b206064356798c21225b6ec7105"
   integrity sha512-0MmkHSHiW2NRFiT9/r5Lu4eJq5UJ4/tzlOgYXNAIj/ONkQTVnz22pLxDvp4C4uZ9he7ZFvGn3Driptn1/iU7tQ==
+
+"@openzeppelin/contracts-upgradeable@5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/contracts-upgradeable/-/contracts-upgradeable-5.1.0.tgz#4d37648b7402929c53e2ff6e45749ecff91eb2b6"
+  integrity sha512-AIElwP5Ck+cslNE+Hkemf5SxjJoF4wBvvjxc27Rp+9jaPs/CLIaUBMYe1FNzhdiN0cYuwGRmYaRHmmntuiju4Q==
 
 "@openzeppelin/contracts-upgradeable@^5.1.0":
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/@openzeppelin/contracts-upgradeable/-/contracts-upgradeable-5.2.0.tgz#caf9a6eaf4f16d7f90f9b45a6db4e7b125f4b13b"
   integrity sha512-mZIu9oa4tQTlGiOJHk6D3LdJlqFqF6oNOSn6S6UVJtzfs9UsY9/dhMEbAVTwElxUtJnjpf6yA062+oBp+eOyPg==
 
-"@openzeppelin/contracts@5.0.1":
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-5.0.1.tgz#93da90fc209a0a4ff09c1deb037fbb35e4020890"
-  integrity sha512-yQJaT5HDp9hYOOp4jTYxMsR02gdFZFXhewX5HW9Jo4fsqSVqqyIO/xTHdWDaKX5a3pv1txmf076Lziz+sO7L1w==
-
 "@openzeppelin/contracts@5.0.2":
   version "5.0.2"
   resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-5.0.2.tgz#b1d03075e49290d06570b2fd42154d76c2a5d210"
   integrity sha512-ytPc6eLGcHHnapAZ9S+5qsdomhjo6QBHTDRRBFfTxXIpsicMhVPouPgmUPebZZZGX7vt9USA+Z+0M0dSVtSUEA==
+
+"@openzeppelin/contracts@5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-5.1.0.tgz#4e61162f2a2bf414c4e10c45eca98ce5f1aadbd4"
+  integrity sha512-p1ULhl7BXzjjbha5aqst+QMLY+4/LCWADXOCsmLHRM77AqiPjnd9vvUN9sosUfhL9JGKpZ0TjEGxgvnizmWGSA==
 
 "@openzeppelin/contracts@^5.1.0":
   version "5.2.0"
@@ -855,10 +862,6 @@
   resolved "https://registry.yarnpkg.com/@solidity-parser/parser/-/parser-0.19.0.tgz#37a8983b2725af9b14ff8c4a475fa0e98d773c3f"
   integrity sha512-RV16k/qIxW/wWc+mLzV3ARyKUaMUTBy9tOLMzFhtNSKYeTAanQ3a5MudJKf/8arIFnA2L27SNjarQKmFg0w/jA==
 
-"@story-protocol/create3-deployer@github:storyprotocol/create3-deployer#main":
-  version "0.0.0"
-  resolved "https://codeload.github.com/storyprotocol/create3-deployer/tar.gz/604d69eb093e0ec2e1e751892748b2508359d5ba"
-
 "@story-protocol/protocol-core-v1.2.3@github:storyprotocol/protocol-core-v1#58f023c":
   version "1.1.0"
   resolved "https://codeload.github.com/storyprotocol/protocol-core-v1/tar.gz/58f023cb4a5ee81617bc8a02a3d2087e125e5a36"
@@ -869,9 +872,9 @@
     erc6551 "^0.3.1"
     solady "^0.0.192"
 
-"@story-protocol/protocol-core@github:storyprotocol/protocol-core-v1#v1.2.3":
+"@story-protocol/protocol-core-v1.3.0@github:storyprotocol/protocol-core-v1#3ef2a99":
   version "1.1.0"
-  resolved "https://codeload.github.com/storyprotocol/protocol-core-v1/tar.gz/58f023cb4a5ee81617bc8a02a3d2087e125e5a36"
+  resolved "https://codeload.github.com/storyprotocol/protocol-core-v1/tar.gz/3ef2a99a99192587d24b4805d5848e3a799dcf5e"
   dependencies:
     "@openzeppelin/contracts" "5.0.2"
     "@openzeppelin/contracts-upgradeable" "5.0.2"
@@ -879,16 +882,25 @@
     erc6551 "^0.3.1"
     solady "^0.0.192"
 
-"@story-protocol/protocol-periphery-v1.2.4@github:storyprotocol/protocol-periphery-v1#d0081ee":
-  version "1.2.4"
-  resolved "https://codeload.github.com/storyprotocol/protocol-periphery-v1/tar.gz/d0081ee9462fe39bffaa3768cdf92fc07df6497b"
+"@story-protocol/protocol-core@github:storyprotocol/protocol-core-v1#main":
+  version "1.1.0"
+  resolved "https://codeload.github.com/storyprotocol/protocol-core-v1/tar.gz/5bb1f0f0d2962aa4ee38e24637be841c77b294e7"
   dependencies:
-    "@openzeppelin/contracts" "5.0.1"
-    "@openzeppelin/contracts-upgradeable" "5.0.1"
-    "@story-protocol/create3-deployer" "github:storyprotocol/create3-deployer#main"
-    "@story-protocol/protocol-core" "github:storyprotocol/protocol-core-v1#v1.2.3"
+    "@openzeppelin/contracts" "5.0.2"
+    "@openzeppelin/contracts-upgradeable" "5.0.2"
+    "@openzeppelin/contracts-upgradeable-v4" "npm:@openzeppelin/contracts-upgradeable@4.9.6"
     erc6551 "^0.3.1"
     solady "^0.0.192"
+
+"@story-protocol/protocol-periphery-v1.3.0@github:storyprotocol/protocol-periphery-v1#ea88959":
+  version "1.3.0"
+  resolved "https://codeload.github.com/storyprotocol/protocol-periphery-v1/tar.gz/ea88959bedeca5fbf807a95d6bce80e75cfadaa3"
+  dependencies:
+    "@openzeppelin/contracts" "5.1.0"
+    "@openzeppelin/contracts-upgradeable" "5.1.0"
+    "@story-protocol/protocol-core" "github:storyprotocol/protocol-core-v1#main"
+    erc6551 "^0.3.1"
+    solady "^0.0.281"
 
 "@typechain/ethers-v6@^0.5.1":
   version "0.5.1"
@@ -3391,6 +3403,11 @@ solady@^0.0.192:
   version "0.0.192"
   resolved "https://registry.yarnpkg.com/solady/-/solady-0.0.192.tgz#f80ea061903ba1914d2c96c3c69f53d66865f88f"
   integrity sha512-96A4dhYkSB/xUyZIuc6l8RMbQ+nqk7GFr0hEci7/64D3G63Ial06puqXA14ZVy/xFe8nzBJbz3Mxssn7SH/1Ag==
+
+solady@^0.0.281:
+  version "0.0.281"
+  resolved "https://registry.yarnpkg.com/solady/-/solady-0.0.281.tgz#2538b475ef4db587c4c946cd032412e08acba4ca"
+  integrity sha512-pO/r0cVb6EXwAISE/cgcn1outhvkEKHEnVCSUTlRdIWDnl013CrUtMx8PbkDYfef2TrJB178TOA0jIBDVyjGBg==
 
 solc@0.8.26:
   version "0.8.26"

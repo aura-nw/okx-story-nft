@@ -2,6 +2,7 @@ const fs = require("fs");
 const privateKey = fs.readFileSync(".secret").toString().trim();
 
 require("@nomicfoundation/hardhat-toolbox");
+require("@nomicfoundation/hardhat-foundry");
 require("hardhat-gas-reporter");
 require("hardhat-deploy");
 

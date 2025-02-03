@@ -7,12 +7,29 @@ import {IOkxMultiRound} from "./IOkxMultiRound.sol";
 /// @notice A Story NFT is a soulbound NFT that has an unified token URI for all tokens.
 interface IPunkNFT is IOkxMultiRound {
     ////////////////////////////////////////////////////////////////////////////
+    //                              Structs                                   //
+    ////////////////////////////////////////////////////////////////////////////
+    /// @notice Struct for custom data for initializing the PunkNFT contract.
+    /// @param tokenURI The token URI for all NFTs (follows OpenSea metadata standard).
+    /// @param signer The signer of the whitelist signatures.
+    /// @param ipMetadataURI The URI of the metadata for all IP from this collection.
+    /// @param ipMetadataHash The hash of the metadata for all IP from this collection.
+    /// @param nftMetadataHash The hash of the metadata for all IP NFTs from this collection.
+    struct CustomInitParams {
+        string tokenURI;
+        address signer;
+        string ipMetadataURI;
+        bytes32 ipMetadataHash;
+        bytes32 nftMetadataHash;
+    }
+    ////////////////////////////////////////////////////////////////////////////
     //                              Events                                    //
     ////////////////////////////////////////////////////////////////////////////
     /// @notice Emitted when a NFT is minted.
     /// @param recipient The address of the recipient of the NFT.
     /// @param tokenId The token ID of the minted NFT.
     /// @param ipId The ID of the NFT IP.
+
     event PunkNFTMinted(address recipient, uint256 tokenId, address ipId);
 
     /// @notice Mints a NFT for the given recipient, registers it as an IP,

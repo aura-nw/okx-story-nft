@@ -5,11 +5,26 @@ pragma solidity ^0.8.26;
 import {AccessControlUpgradeable} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import {ERC721Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import {OkxMultiRound} from "./utils/OkxMultiRound.sol";
-import {StoryRegistration} from "./utils/StoryRegistration.sol";
+import {IDerivativeWorkflows} from
+    "@story-protocol/protocol-periphery-v1.3.0/contracts/interfaces/workflows/IDerivativeWorkflows.sol";
+import {WorkflowStructs} from "@story-protocol/protocol-periphery-v1.3.0/contracts/lib/WorkflowStructs.sol";
 import {IPunkNFT} from "./interfaces/IPunkNFT.sol";
 
 /// @custom:security-contact mr.nmh175@gmail.com
-contract PunkNFT is IPunkNFT, ERC721Upgradeable, AccessControlUpgradeable, StoryRegistration, OkxMultiRound {
+contract PunkNFT is IPunkNFT, ERC721Upgradeable, AccessControlUpgradeable, OkxMultiRound {
+    IDerivativeWorkflows public DERIVATIVE_WORKFLOWS;
+
+    /// @notice The default license terms ID.
+    uint256 public DEFAULT_LICENSE_TERMS_ID;
+
+    /// @notice Story Proof-of-Creativity PILicense Template address.
+    address public PIL_TEMPLATE;
+
+    address public rootIpId;
+    string public ipMetadataURI;
+    bytes32 public ipMetadataHash;
+    bytes32 public nftMetadataHash;
+
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
         _disableInitializers();
@@ -17,26 +32,24 @@ contract PunkNFT is IPunkNFT, ERC721Upgradeable, AccessControlUpgradeable, Story
 
     function initialize(
         address defaultAdmin,
-        address pauser,
         address minter,
-        address ipAssetRegistry,
-        address licensingModule,
-        address coreMetadataModule,
         address pilTemplate,
-        uint256 defaultLicenseTermsId,
+        address derivativeWorkflows,
         CustomInitParams calldata customInitParams
     ) public initializer {
         __ERC721_init("PunkNFT", "PNFT");
         __AccessControl_init();
         __OkxMultiRound_init(customInitParams.signer, 10000);
 
-        __StoryRegistration_init(
-            ipAssetRegistry, licensingModule, coreMetadataModule, pilTemplate, defaultLicenseTermsId, customInitParams
-        );
-
         _grantRole(DEFAULT_ADMIN_ROLE, defaultAdmin);
-        _grantRole(PAUSER_ROLE, pauser);
         _grantRole(MINTER_ROLE, minter);
+
+        DERIVATIVE_WORKFLOWS = IDerivativeWorkflows(derivativeWorkflows);
+        PIL_TEMPLATE = pilTemplate;
+
+        ipMetadataURI = customInitParams.ipMetadataURI;
+        ipMetadataHash = customInitParams.ipMetadataHash;
+        nftMetadataHash = customInitParams.nftMetadataHash;
     }
 
     /// @notice Mints a NFT for the given recipient, registers it as an IP,
@@ -54,6 +67,7 @@ contract PunkNFT is IPunkNFT, ERC721Upgradeable, AccessControlUpgradeable, Story
         bytes32[] calldata, /* proof */
         MintParams calldata mintparams
     ) external returns (uint256 tokenId, address ipId) {
+        // register minting with OKX MultiRound
         uint256 amount = _registerMinting(stage, signature, mintparams);
 
         for (uint256 i = 0; i < amount; ++i) {
@@ -77,15 +91,32 @@ contract PunkNFT is IPunkNFT, ERC721Upgradeable, AccessControlUpgradeable, Story
         tokenId = ++totalMintedAmount;
         _safeMint(address(this), tokenId);
 
-        ipId = _registerIp(tokenId);
-
         address[] memory parentIpIds = new address[](1);
         uint256[] memory licenseTermsIds = new uint256[](1);
         parentIpIds[0] = rootIpId;
         licenseTermsIds[0] = DEFAULT_LICENSE_TERMS_ID;
 
-        // Make the NFT a derivative of the root IP
-        _makeDerivative(ipId, parentIpIds, PIL_TEMPLATE, licenseTermsIds, "");
+        // register and make derivative IP
+        ipId = DERIVATIVE_WORKFLOWS.registerIpAndMakeDerivative(
+            address(this),
+            tokenId,
+            WorkflowStructs.MakeDerivative({
+                parentIpIds: parentIpIds,
+                licenseTemplate: PIL_TEMPLATE,
+                licenseTermsIds: licenseTermsIds,
+                royaltyContext: "",
+                maxMintingFee: 0,
+                maxRts: 0,
+                maxRevenueShare: 0
+            }),
+            WorkflowStructs.IPMetadata({
+                ipMetadataURI: ipMetadataURI,
+                ipMetadataHash: ipMetadataHash,
+                nftMetadataURI: "",
+                nftMetadataHash: nftMetadataHash
+            }),
+            WorkflowStructs.SignatureData({signer: address(0), deadline: 0, signature: new bytes(0)})
+        );
     }
 
     // The following functions are overrides required by Solidity.

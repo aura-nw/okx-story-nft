@@ -8,6 +8,7 @@
   "dependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.8",
     "@nomicfoundation/hardhat-ethers": "^3.0.8",
+    "@nomicfoundation/hardhat-foundry": "^1.1.3",
     "@nomicfoundation/hardhat-ignition": "^0.15.9",
     "@nomicfoundation/hardhat-ignition-ethers": "^0.15.9",
     "@nomicfoundation/hardhat-network-helpers": "^1.0.12",
@@ -27,6 +28,7 @@
   },
   "devDependencies": {
     "@story-protocol/protocol-core-v1.2.3": "github:storyprotocol/protocol-core-v1#58f023c",
-    "@story-protocol/protocol-periphery-v1.2.4": "github:storyprotocol/protocol-periphery-v1#d0081ee"
+    "@story-protocol/protocol-core-v1.3.0": "github:storyprotocol/protocol-core-v1#3ef2a99",
+    "@story-protocol/protocol-periphery-v1.3.0": "github:storyprotocol/protocol-periphery-v1#ea88959"
   }
 }
