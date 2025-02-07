@@ -42,6 +42,14 @@ interface IMimbokuMultiround {
     //                               WRITE FUNCTIONS                                //
     //////////////////////////////////////////////////////////////////////////////////
 
+    /// @notice Updates the whitelist signer.
+    /// @param signer_ The new whitelist signer address.
+    function setSigner(address signer_) external;
+
+    /// @notice Configure or update the maximum number of nfts that can be minted.
+    /// @param newMaxSupply The new maximum number of nfts that can be minted.
+    function setMaxSupply(uint256 newMaxSupply) external;
+
     /// @notice Configure or update the information of a certain round according to the stage
     /// @param stageMintInfo The mint information for the stage.
     function setStageMintInfo(IOKXMultiMint.StageMintInfo calldata stageMintInfo) external;

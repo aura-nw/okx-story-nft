@@ -13,6 +13,8 @@ import {IMimbokuMultiround} from "./interfaces/IMimbokuMultiround.sol";
 import {IOKXMultiMint} from "./interfaces/IOKXMultiMint.sol";
 
 contract MimbokuMultiround is IMimbokuMultiround, Initializable, AccessControlUpgradeable {
+    bytes32 public constant OWNER_ROLE = keccak256("OWNER_ROLE");
+
     /// We need a NFT contract to mint NFTs
     address public NFT_CONTRACT;
 
@@ -48,6 +50,7 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, AccessControlUp
 
     function initialize(
         address defaultAdmin,
+        address owner,
         address nftContract,
         address multiRoundContract,
         IPMetadata calldata ipMetadata
@@ -55,6 +58,7 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, AccessControlUp
         __AccessControl_init();
 
         _grantRole(DEFAULT_ADMIN_ROLE, defaultAdmin);
+        _grantRole(OWNER_ROLE, owner);
 
         // The NFT collection contract
         NFT_CONTRACT = nftContract;
@@ -77,9 +81,27 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, AccessControlUp
     //                               WRITE FUNCTIONS                                //
     //////////////////////////////////////////////////////////////////////////////////
 
+    /// @notice Updates the whitelist signer.
+    /// @param signer_ The new whitelist signer address.
+    function setSigner(address signer_) external onlyRole(OWNER_ROLE) {
+        IOKXMultiMint(MULTIROUND_CONTRACT).setActiveSigner(signer_, true);
+    }
+
+    /// @notice Configure or update the maximum number of nfts that can be minted.
+    /// @param newMaxSupply The new maximum number of nfts that can be minted.
+    function setMaxSupply(uint256 newMaxSupply) external onlyRole(OWNER_ROLE) {
+        IOKXMultiMint(MULTIROUND_CONTRACT).setMaxSupply(newMaxSupply);
+
+        // update the remaining token_id list
+        delete remainingTokenIds; // Clear storage before re-allocating
+        remainingTokenIds = new uint256[](newMaxSupply); // Allocate storage
+
+        remainingTokenIdCount = newMaxSupply;
+    }
+
     /// @notice Configure or update the information of a certain round according to the stage
     /// @param stageMintInfo The mint information for the stage.
-    function setStageMintInfo(IOKXMultiMint.StageMintInfo calldata stageMintInfo) external {
+    function setStageMintInfo(IOKXMultiMint.StageMintInfo calldata stageMintInfo) external onlyRole(OWNER_ROLE) {
         IOKXMultiMint(MULTIROUND_CONTRACT).setStageMintInfo(stageMintInfo);
 
         // update the remaining token_id list
@@ -94,14 +116,14 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, AccessControlUp
     /// @param stage Round identification.
     /// @param startTime The start time of the stage.
     /// @param endTime The end time of the stage.
-    function setStageMintTime(string calldata stage, uint64 startTime, uint64 endTime) external {
+    function setStageMintTime(string calldata stage, uint64 startTime, uint64 endTime) external onlyRole(OWNER_ROLE) {
         IOKXMultiMint(MULTIROUND_CONTRACT).setStageMintTime(stage, startTime, endTime);
     }
 
     /// @notice According to the stage, set the maximum nft supply for a specific round.
     /// @param stage Round identification.
     /// @param maxSupply nft maximum supply.
-    function setStageMaxSupply(string calldata stage, uint32 maxSupply) external {
+    function setStageMaxSupply(string calldata stage, uint32 maxSupply) external onlyRole(OWNER_ROLE) {
         IOKXMultiMint(MULTIROUND_CONTRACT).setStageMaxSupply(stage, maxSupply);
     }
 
@@ -112,6 +134,7 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, AccessControlUp
     /// @param price Single nft price.
     function setStagePayment(string calldata stage, address payeeAddress, address paymentToken, uint64 price)
         external
+        onlyRole(OWNER_ROLE)
     {
         IOKXMultiMint(MULTIROUND_CONTRACT).setStagePayment(stage, payeeAddress, paymentToken, price);
     }
@@ -119,14 +142,17 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, AccessControlUp
     /// @notice Set the upper limit of the number of mints per address for a specific round according to the stage
     /// @param stage Round identification.
     /// @param mintLimitationPerAddress Single address mint limit.
-    function setStageMintLimitationPerAddress(string calldata stage, uint8 mintLimitationPerAddress) external {
+    function setStageMintLimitationPerAddress(string calldata stage, uint8 mintLimitationPerAddress)
+        external
+        onlyRole(OWNER_ROLE)
+    {
         IOKXMultiMint(MULTIROUND_CONTRACT).setStageMintLimitationPerAddress(stage, mintLimitationPerAddress);
     }
 
     /// @notice Set whether server level signing is enabled for a specific round according to the stage
     /// @param stage Round identification.
     /// @param enableSig Whether to enable (true, false).
-    function setStageEnableSig(string calldata stage, bool enableSig) external {
+    function setStageEnableSig(string calldata stage, bool enableSig) external onlyRole(OWNER_ROLE) {
         IOKXMultiMint(MULTIROUND_CONTRACT).setStageEnableSig(stage, enableSig);
     }
 
@@ -135,7 +161,7 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, AccessControlUp
     ///     If the address has not been configured, then it is and add function to configure the address.
     /// @param signer Signer address.
     /// @param status Effective status.
-    function setActiveSigner(address signer, bool status) external {
+    function setActiveSigner(address signer, bool status) external onlyRole(OWNER_ROLE) {
         IOKXMultiMint(MULTIROUND_CONTRACT).setActiveSigner(signer, status);
     }
 
@@ -144,7 +170,10 @@ contract MimbokuMultiround is IMimbokuMultiround, Initializable, AccessControlUp
     /// @param isTransferRestricted_ Whether to restrict transfer.
     /// @param startTime Start time.
     /// @param endTime End time.
-    function setTransferRestricted(bool isTransferRestricted_, uint64 startTime, uint64 endTime) external {
+    function setTransferRestricted(bool isTransferRestricted_, uint64 startTime, uint64 endTime)
+        external
+        onlyRole(OWNER_ROLE)
+    {
         IOKXMultiMint(MULTIROUND_CONTRACT).setTransferRestricted(isTransferRestricted_, startTime, endTime);
     }
 

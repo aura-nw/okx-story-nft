@@ -11,25 +11,40 @@ import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Ini
 contract MimBokuNFT is Initializable, ERC721Upgradeable, ERC721EnumerableUpgradeable, AccessControlUpgradeable {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
+    string public baseURI;
+
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
         _disableInitializers();
     }
 
-    function initialize(address defaultAdmin, address minter, string calldata name, string calldata symbol)
-        public
-        initializer
-    {
+    function initialize(
+        address defaultAdmin,
+        address minter,
+        string calldata name,
+        string calldata symbol,
+        string calldata baseURI_
+    ) public initializer {
         __ERC721_init(name, symbol);
         __ERC721Enumerable_init();
         __AccessControl_init();
 
         _grantRole(DEFAULT_ADMIN_ROLE, defaultAdmin);
         _grantRole(MINTER_ROLE, minter);
+
+        baseURI = baseURI_;
     }
 
     function safeMint(address to, uint256 tokenId) public onlyRole(MINTER_ROLE) {
         _safeMint(to, tokenId);
+    }
+
+    function setTokenURI(string calldata baseURI_) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        baseURI = baseURI_;
+    }
+
+    function _baseURI() internal view override returns (string memory) {
+        return baseURI;
     }
 
     // The following functions are overrides required by Solidity.

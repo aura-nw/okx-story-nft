@@ -100,9 +100,13 @@ interface IOKXMultiMint {
     function eligibleCheckingAndRegister(
         string calldata stage,
         bytes32[] calldata proof,
-        bytes calldata, /*signature*/
+        bytes calldata signature,
         MintParams calldata mintparams
     ) external returns (uint256 amount);
+
+    /// @notice Configure or update the maximum number of nfts that can be minted.
+    /// @param newMaxSupply The new maximum number of nfts that can be minted.
+    function setMaxSupply(uint256 newMaxSupply) external;
 
     /// @notice Updates the whitelist signer.
     /// @param signer_ The new whitelist signer address.

@@ -11,7 +11,6 @@ import {IOKXMultiMint} from "../interfaces/IOKXMultiMint.sol";
 /// @custom:security-contact mr.nmh175@gmail.com
 abstract contract OkxMultiRound is IOKXMultiMint, EIP712Upgradeable, AccessControlUpgradeable {
     bytes32 public constant OWNER_CONTRACT = keccak256("OWNER_CONTRACT");
-    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
     bytes32 public constant MINT_AUTH_TYPE_HASH =
         keccak256("MintAuth(address to,uint256 tokenId,uint256 amount,uint256 nonce,uint256 expiry,string stage)");
@@ -49,7 +48,7 @@ abstract contract OkxMultiRound is IOKXMultiMint, EIP712Upgradeable, AccessContr
     function eligibleCheckingAndRegister(
         string calldata stage,
         bytes32[] calldata proof,
-        bytes calldata, /*signature*/
+        bytes calldata signature,
         MintParams calldata mintparams
     ) external returns (uint256 amount) {
         amount = mintparams.amount;
@@ -66,7 +65,7 @@ abstract contract OkxMultiRound is IOKXMultiMint, EIP712Upgradeable, AccessContr
             }
         }
 
-        // _useSignature(stage, signature, mintparams); // disable signature for now
+        _useSignature(stage, signature, mintparams);
 
         _validateActive(stage);
         _validateAmount(stage, mintparams.to, amount);
@@ -77,6 +76,13 @@ abstract contract OkxMultiRound is IOKXMultiMint, EIP712Upgradeable, AccessContr
     /// @param signer_ The new whitelist signer address.
     function setSigner(address signer_) external onlyRole(OWNER_CONTRACT) {
         signer = signer_;
+    }
+
+    /// @notice Configure or update the maximum number of nfts that can be minted.
+    /// @param newMaxSupply The new maximum number of nfts that can be minted.
+    function setMaxSupply(uint256 newMaxSupply) external onlyRole(OWNER_CONTRACT) {
+        totalMaxSupply = newMaxSupply;
+        emit MaxSupplySet(uint32(newMaxSupply));
     }
 
     /// @notice Configure or update the information of a certain round according to the stage
@@ -248,38 +254,38 @@ abstract contract OkxMultiRound is IOKXMultiMint, EIP712Upgradeable, AccessContr
     //                      internal functions and modifiers                        //
     //////////////////////////////////////////////////////////////////////////////////
 
-    // function _useSignature(string calldata stage, bytes calldata signature, MintParams calldata mintparams) internal {
-    //     StageMintInfo memory stageMintInfo = _stageToMint[stage];
-    //     if (stageMintInfo.enableSig) {
-    //         // The given signature must not have been used
-    //         if (usedSignatures[signature]) revert SignatureAlreadyUsed();
+    function _useSignature(string calldata stage, bytes calldata signature, MintParams calldata mintparams) internal {
+        StageMintInfo memory stageMintInfo = _stageToMint[stage];
+        if (stageMintInfo.enableSig) {
+            // The given signature must not have been used
+            if (usedSignatures[signature]) revert SignatureAlreadyUsed();
 
-    //         if (block.timestamp > mintparams.expiry) revert ExpiredSignature();
+            if (block.timestamp > mintparams.expiry) revert ExpiredSignature();
 
-    //         // Mark the signature as used
-    //         usedSignatures[signature] = true;
+            // Mark the signature as used
+            usedSignatures[signature] = true;
 
-    //         // The given signature must be valid
-    //         bytes32 digest;
-    //         {
-    //             bytes32 stageByte32 = keccak256(bytes(stage));
-    //             digest = keccak256(
-    //                 abi.encode(
-    //                     MINT_AUTH_TYPE_HASH,
-    //                     mintparams.to,
-    //                     mintparams.tokenId,
-    //                     mintparams.amount,
-    //                     mintparams.nonce,
-    //                     mintparams.expiry,
-    //                     stageByte32
-    //                 )
-    //             );
-    //         }
+            // The given signature must be valid
+            bytes32 digest;
+            {
+                bytes32 stageByte32 = keccak256(bytes(stage));
+                digest = keccak256(
+                    abi.encode(
+                        MINT_AUTH_TYPE_HASH,
+                        mintparams.to,
+                        mintparams.tokenId,
+                        mintparams.amount,
+                        mintparams.nonce,
+                        mintparams.expiry,
+                        stageByte32
+                    )
+                );
+            }
 
-    //         address recoveredSigner = ECDSA.recover(_hashTypedDataV4(digest), signature);
-    //         if (recoveredSigner != signer) revert InvalidSignature();
-    //     }
-    // }
+            address recoveredSigner = ECDSA.recover(_hashTypedDataV4(digest), signature);
+            if (recoveredSigner != signer) revert InvalidSignature();
+        }
+    }
 
     function _increaseMintRecord(string calldata stage, address user, uint256 amount) internal {
         totalMintedAmount += amount;
